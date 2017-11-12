@@ -1,4 +1,7 @@
 /*
 !/.gitignore
 !/Uploader.ts
-!/UploadItem/*.ts
+!/UploadItem
+/UploadItem/*
+!/UploadItem/AbstractItem.ts
+!/UploadItem/FileItem.ts

@@ -1,7 +1,7 @@
-namespace TS4D {
+namespace CS4D {
 
-    import AbstractItem = TS4D.UploadItem.AbstractItem;
-    import FileItem = TS4D.UploadItem.FileItem;
+    import AbstractItem = CS4D.UploadItem.AbstractItem;
+    import FileItem = CS4D.UploadItem.FileItem;
 
     export class Uploader {
         uploadList : Array<AbstractItem>;

@@ -6,3 +6,4 @@
 /UploadItem/*
 !/UploadItem/AbstractItem.ts
 !/UploadItem/FileItem.ts
+!/UploadItem/Base64Item.ts

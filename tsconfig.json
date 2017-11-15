@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "outFile": "cs4d-uploader.js",
+    "target": "es2015"
+  },
+  "include": [
+    "UploadItem/*.ts",
+    "Uploader.ts"
+  ]
+}

@@ -9,27 +9,33 @@ namespace CS4D {
                 this.xhr = new XMLHttpRequest();
             }
 
-            abstract sendBase64( xhr: XMLHttpRequest );
-            abstract sendFile( xhr: XMLHttpRequest );
+            abstract getBase64(): Promise<string>;
+            abstract getFile(): Promise<File>;
 
-            public uploadAsBase64(): AbstractItem{
+            public uploadAsBase64(){
                 this.xhr.open(
                     'POST',
                     'http://127.0.10.1:8084/upload-reciever.php',
                     true
                 );
-                this.sendBase64( this.xhr );
-                return this;
+                this.getBase64().then((base64) => {
+                    let formData = new FormData();
+                    formData.append('file-field', base64);
+                    this.xhr.send(formData);
+                });
             }
 
-            public uploadAsFile(): AbstractItem{
+            public uploadAsFile(){
                 this.xhr.open(
                     'POST',
                     'http://127.0.10.1:8084/upload-reciever.php',
                     true
                 );
-                this.sendFile( this.xhr );
-                return this;
+                this.getFile().then((file) => {
+                    let formData = new FormData();
+                    formData.append('file-field', file);
+                    this.xhr.send(formData);
+                });
             }
         }
     }

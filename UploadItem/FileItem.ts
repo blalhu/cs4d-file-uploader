@@ -8,20 +8,23 @@ namespace CS4D {
                 return this;
             }
 
-            sendBase64( xhr ) {
-                let fileReader = new FileReader();
-                fileReader.readAsDataURL( this.file );
-                fileReader.onload = () => {
-                    let formData = new FormData();
-                    formData.append('file-field', fileReader.result);
-                    xhr.send(formData);
-                };
+            getBase64(): Promise<string>{
+                return new Promise((resolve, reject) => {
+                    let fileReader = new FileReader();
+                    fileReader.onload = () => {
+                        resolve(fileReader.result);
+                    };
+                    fileReader.onerror = () => {
+                        reject( fileReader.error );
+                    };
+                    fileReader.readAsDataURL( this.file );
+                });
             }
 
-            sendFile( xhr ){
-                let formData = new FormData();
-                formData.append('file-field', this.file);
-                xhr.send(formData);
+            getFile(): Promise<File>{
+                return new Promise((resolve, reject) => {
+                    resolve(this.file);
+                });
             }
 
         }

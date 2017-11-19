@@ -7,11 +7,14 @@ namespace CS4D{
                 this.dataUrl = dataUrl;
             }
 
-            getFile(): Promise<File>{
+            getFile(filename: string = null): Promise<File>{
                 return new Promise((resolve, reject) => {
                     try{
                         let dataUrlObject = new CS4D.DataUrl( this.dataUrl );
-                        let file = new File([dataUrlObject.getContent()], 'foo.txt');
+                        if(filename === null){
+                            filename = 'c4sd-' + ((new Date()).getTime()).toString();
+                        }
+                        let file = new File([dataUrlObject.getContent()], filename, {type: dataUrlObject.getMimeType()});
                         resolve( file );
                     }catch (error) {
                         reject(error);

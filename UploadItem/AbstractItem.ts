@@ -23,7 +23,6 @@ namespace CS4D {
                 );
                 this.getPlainText().then((content) => {
                     let formData = new FormData();
-                    console.log(content);
                     formData.append('file-field', content);
                     this.xhr.send(formData);
                 });
@@ -55,13 +54,13 @@ namespace CS4D {
                 });
             }
 
-            public uploadAsFile(){
+            public uploadAsFile(filename: string = null){
                 this.xhr.open(
                     'POST',
                     'http://127.0.10.1:8084/upload-reciever.php',
                     true
                 );
-                this.getFile().then((file) => {
+                this.getFile(filename).then((file) => {
                     let formData = new FormData();
                     formData.append('file-field', file);
                     this.xhr.send(formData);

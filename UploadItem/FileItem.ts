@@ -8,7 +8,47 @@ namespace CS4D {
                 return this;
             }
 
+            getPlainText(): Promise<string>{
+                return new Promise((resolve, reject) => {
+                    this.getDataUrl()
+                        .then((dataUrl) => {
+                            let dataUrlObj = new CS4D.DataUrl( dataUrl );
+                            if(!dataUrlObj.contentIsBase64()){
+                                resolve( dataUrlObj.getContent() );
+                                return;
+                            }
+                            resolve(
+                                atob( dataUrlObj.getContent() )
+                            );
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        })
+                    ;
+                });
+            }
+
             getBase64(): Promise<string>{
+                return new Promise((resolve, reject) => {
+                    this.getDataUrl()
+                        .then((dataUrl) => {
+                            let dataUrlObj = new CS4D.DataUrl( dataUrl );
+                            if(dataUrlObj.contentIsBase64()){
+                                resolve( dataUrlObj.getContent() );
+                                return;
+                            }
+                            resolve(
+                                btoa( dataUrlObj.getContent() )
+                            );
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        })
+                    ;
+                });
+            }
+
+            getDataUrl(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     let fileReader = new FileReader();
                     fileReader.onload = () => {

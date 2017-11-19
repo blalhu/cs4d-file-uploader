@@ -5,6 +5,7 @@
   },
   "include": [
     "UploadItem/*.ts",
+    "DataUrl.ts",
     "Uploader.ts"
   ]
 }

@@ -3,7 +3,9 @@
 !/tsconfig.json
 !/Uploader.ts
 !/UploadItem
+!/DataUrl.ts
 /UploadItem/*
 !/UploadItem/AbstractItem.ts
 !/UploadItem/FileItem.ts
 !/UploadItem/Base64Item.ts
+!/UploadItem/DataUrl.ts

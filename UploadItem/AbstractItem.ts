@@ -18,7 +18,7 @@ namespace CS4D {
             public uploadAsPlainText(){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.10.1:8084/upload-reciever.php',
+                    'http://127.0.0.1:8085/upload-reciever.php',
                     true
                 );
                 this.getPlainText().then((content) => {
@@ -31,7 +31,7 @@ namespace CS4D {
             public uploadAsBase64(){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.10.1:8084/upload-reciever.php',
+                    'http://127.0.0.1:8085/upload-reciever.php',
                     true
                 );
                 this.getBase64().then((base64) => {
@@ -44,7 +44,7 @@ namespace CS4D {
             public uploadAsDataUrl(){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.10.1:8084/upload-reciever.php',
+                    'http://127.0.0.1:8085/upload-reciever.php',
                     true
                 );
                 this.getDataUrl().then((dataUrl) => {
@@ -57,7 +57,7 @@ namespace CS4D {
             public uploadAsFile(filename: string = null){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.10.1:8084/upload-reciever.php',
+                    'http://127.0.0.1:8085/upload-reciever.php',
                     true
                 );
                 this.getFile(filename).then((file) => {

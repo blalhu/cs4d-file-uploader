@@ -7,5 +7,5 @@
 /UploadItem/*
 !/UploadItem/AbstractItem.ts
 !/UploadItem/FileItem.ts
-!/UploadItem/Base64Item.ts
+!/UploadItem/Base64.ts
 !/UploadItem/DataUrl.ts

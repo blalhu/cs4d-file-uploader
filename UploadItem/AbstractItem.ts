@@ -4,6 +4,7 @@ namespace CS4D {
             file: File;
             dataUrl: string;
             base64: string;
+            plainText: string;
             xhr: XMLHttpRequest;
 
             constructor(){

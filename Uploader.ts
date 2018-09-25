@@ -4,6 +4,7 @@ namespace CS4D {
     import FileItem = CS4D.UploadItem.FileItem;
     import DataUrlItem = CS4D.UploadItem.DataUrl;
     import Base64Item = CS4D.UploadItem.Base64;
+    import PlainTextItem = CS4D.UploadItem.PlainText;
 
     export class Uploader {
         uploadList : Array<AbstractItem>;
@@ -39,6 +40,16 @@ namespace CS4D {
                 throw new Error('Invalid argument type!');
             }
             let currentUploadItem = new Base64Item(dataUrl);
+            this.uploadList.push( currentUploadItem );
+            return currentUploadItem;
+        }
+
+        public addAsPlainText(plainText : string) {
+            if(typeof plainText != 'string'){
+                console.log(plainText);
+                throw new Error('Invalid argument type!');
+            }
+            let currentUploadItem = new PlainTextItem(plainText);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }

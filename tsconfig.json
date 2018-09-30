@@ -4,6 +4,7 @@
     "target": "es2015"
   },
   "include": [
+    "Options/*.ts",
     "UploadItem/*.ts",
     "UploadType/*.ts",
     "DataUrl.ts",

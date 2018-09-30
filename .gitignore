@@ -14,3 +14,5 @@
 /UploadType/*
 !/UploadType/Base64.ts
 !/UploadType/DataUrl.ts
+/Options/*
+!/Options/PerformanceType.ts

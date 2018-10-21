@@ -3,12 +3,11 @@ namespace CS4D {
 
         import UploaderPerformanceType = CS4D.Options.PerformanceType;
         import Base64Base64Input = CS4D.UploadType.Base64Input;
-        import Base64PlainInput  = CS4D.UploadType.PlainTextInput;
-        import PlainText = CS4D.UploadItem.PlainText;
+        import Base64PlainInput = CS4D.UploadType.PlainTextInput;
 
         export class DataUri {
 
-            constructor( input :DataUriInput, performanceStrategy :UploaderPerformanceType ){
+            constructor( input :DUInput , performanceStrategy :UploaderPerformanceType ){
                 this.performanceStrategy = performanceStrategy;
                 this.content             = input.getContent();
                 this.uriString           = input.getUriString();
@@ -43,28 +42,66 @@ namespace CS4D {
                 return this.uriParts.mediaType;
             }
 
-            public getDataUri() {
-
+            public getDataUri(mediaType :string = null, isBase64 :boolean = null) {
+                if (
+                    mediaType == null
+                    && isBase64 == null
+                    && typeof this.uriString != 'undefined'
+                ) {
+                    return this.uriString;
+                }
+                let dataUriParts = new DataUriValues();
+                if ( typeof this.uriString != 'undefined' ) {
+                    dataUriParts  = this.getDataUriParts( this.uriString );
+                } else {
+                    dataUriParts.content = this.content;
+                    if ( mediaType != null ) {
+                        dataUriParts.mediaType = mediaType;
+                    }
+                    if ( isBase64 != null ) {
+                        dataUriParts.isBase64 = isBase64;
+                    }
+                }
+                let dataUri = 'data:';
+                if (typeof dataUriParts.mediaType != 'undefined') {
+                    dataUri += <string> dataUriParts.mediaType;
+                }
+                if ( isBase64 == true ) {
+                    dataUri += ';base64';
+                }
+                dataUri += ',';
+                if ( isBase64 ) {
+                    dataUri += dataUriParts.content.getBase64();
+                } else {
+                    dataUri += dataUriParts.content.getPlainText();
+                }
+                if (this.performanceStrategy == Options.PerformanceType.LAZYLOAD) {
+                    this.uriParts = dataUriParts;
+                }
+                return dataUri;
             }
 
-            public getDataUriParts( dataUri :string ) {
-                var dataUriRegExp = new RegExp('^data\:(.+(?<!\;base64)|)(\;base64|)\,(.*)$'); //TODO: workaround for look behind
+            public getDataUriParts( dataUri :string = null ) {
+                if (dataUri == null) {
+                    dataUri = this.uriString
+                }
+                var dataUriRegExp = new RegExp('^data\:([^\,]*)\,(.*)$'); //TODO: workaround for look behind
                 var processedParts = dataUriRegExp.exec(dataUri);
                 var returnParts = new DataUriValues();
                 returnParts.completeData = dataUri;
-                returnParts.mediaType = processedParts[1];
+                returnParts.mediaType = processedParts[1].split(';base64')[0];
                 returnParts.isBase64  = false;
-                if ( processedParts[2] == ';base64' ) {
+                if ( processedParts[1].match(/;base64$/) ) {
                     returnParts.isBase64 = true;
                 }
                 if (returnParts.isBase64) {
                     returnParts.content = new Base64(
-                        new Base64Base64Input(processedParts[3]),
+                        new Base64Base64Input(processedParts[2]),
                         this.performanceStrategy
                     );
                 } else {
                     returnParts.content = new Base64(
-                        new Base64PlainInput(processedParts[3]),
+                        new Base64PlainInput(processedParts[2]),
                         this.performanceStrategy
                     );
                 }
@@ -80,7 +117,7 @@ namespace CS4D {
             content :Base64;
         }
         
-        abstract class Input {
+        abstract class DUInput {
             protected content :Base64;
             protected uriString :string;
             getUriString() :string{
@@ -91,7 +128,7 @@ namespace CS4D {
             }
         }
 
-        class PlainTextInput extends Input {
+        export class DUPlainTextInput extends DUInput {
             constructor (data :string) {
                 super();
                 this.content = new Base64(
@@ -101,7 +138,7 @@ namespace CS4D {
             }
         }
 
-        class Base64Input extends Input {
+        export class DUBase64Input extends DUInput {
             constructor (data :string) {
                 super();
                 this.content = new Base64(
@@ -111,7 +148,7 @@ namespace CS4D {
             }
         }
 
-        class DataUriInput extends Input {
+        export class DUDataUriInput extends DUInput {
             constructor (dataUri :string) {
                 super();
                 this.uriString = dataUri;

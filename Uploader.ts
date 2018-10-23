@@ -2,7 +2,7 @@ namespace CS4D {
 
     import AbstractItem = CS4D.UploadItem.AbstractItem;
     import FileItem = CS4D.UploadItem.FileItem;
-    import DataUrlItem = CS4D.UploadItem.DataUrl;
+    import DataUriItem = CS4D.UploadItem.DataUri;
     import Base64Item = CS4D.UploadItem.Base64;
     import PlainTextItem = CS4D.UploadItem.PlainText;
 
@@ -23,23 +23,23 @@ namespace CS4D {
             return currentUploadItem;
         }
 
-        public addAsDataUrl(dataUrl : string) {
-            if(typeof dataUrl != 'string'){
-                console.log(dataUrl);
+        public addAsDataUri(dataUri : string) {
+            if(typeof dataUri != 'string'){
+                console.log(dataUri);
                 throw new Error('Invalid argument type!');
             }
-            let currentUploadItem = new DataUrlItem(dataUrl);
+            let currentUploadItem = new DataUriItem(dataUri);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }
 
 
-        public addAsBase64(dataUrl : string) {
-            if(typeof dataUrl != 'string'){
-                console.log(dataUrl);
+        public addAsBase64(dataUri : string) {
+            if(typeof dataUri != 'string'){
+                console.log(dataUri);
                 throw new Error('Invalid argument type!');
             }
-            let currentUploadItem = new Base64Item(dataUrl);
+            let currentUploadItem = new Base64Item(dataUri);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }

@@ -7,7 +7,6 @@
     "Options/*.ts",
     "UploadType/**/*.ts",
     "UploadItem/*.ts",
-    "DataUrl.ts",
     "Uploader.ts"
   ]
 }

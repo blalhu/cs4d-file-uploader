@@ -7,7 +7,7 @@ namespace CS4D {
         export abstract class AbstractItem {
 
             file: File;
-            dataUrl: DataUriType;
+            dataUri: DataUriType;
             base64: Base64Type;
             plainText: string;
             xhr: XMLHttpRequest;

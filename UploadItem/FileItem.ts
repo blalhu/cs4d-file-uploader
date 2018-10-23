@@ -14,9 +14,9 @@ namespace CS4D {
             getPlainText(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     this.getDataUri()
-                        .then((dataUrl) => {
-                            let dataUrlObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
-                            resolve( dataUrlObj.getPlainData() );
+                        .then((dataUri) => {
+                            let dataUriObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUri ) );
+                            resolve( dataUriObj.getPlainData() );
                         })
                         .catch((error) => {
                             reject(error);
@@ -28,9 +28,9 @@ namespace CS4D {
             getBase64(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     this.getDataUri()
-                        .then((dataUrl) => {
-                            let dataUrlObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
-                            resolve( dataUrlObj.getBase64Data() );
+                        .then((dataUri) => {
+                            let dataUriObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUri ) );
+                            resolve( dataUriObj.getBase64Data() );
                         })
                         .catch((error) => {
                             reject(error);

@@ -3,11 +3,11 @@ namespace CS4D{
 
         import DataUriType = UploadType.DataUri.Type;
 
-        export class DataUrl extends AbstractItem{
+        export class DataUri extends AbstractItem{
 
-            constructor(dataUrl: string) {
+            constructor(dataUri: string) {
                 super();
-                this.dataUrl = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
+                this.dataUri = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUri ) );
             }
 
             getFile(filename: string = null): Promise<File>{
@@ -16,7 +16,7 @@ namespace CS4D{
                         if(filename === null){
                             filename = 'c4sd-' + ((new Date()).getTime()).toString();
                         }
-                        let file = new File([this.dataUrl.getPlainData()], filename, {type: this.dataUrl.getMediaType().split(';')[0]});
+                        let file = new File([this.dataUri.getPlainData()], filename, {type: this.dataUri.getMediaType().split(';')[0]});
                         resolve( file );
                     }catch (error) {
                         reject(error);
@@ -27,7 +27,7 @@ namespace CS4D{
 
             getDataUri(): Promise<string>{
                 return new Promise((resolve, reject) => {
-                    resolve(this.dataUrl.getDataUri());
+                    resolve(this.dataUri.getDataUri());
                 });
             }
 
@@ -35,7 +35,7 @@ namespace CS4D{
                 return new Promise((resolve, reject) => {
                     try{
                         resolve(
-                            this.dataUrl.getBase64Data()
+                            this.dataUri.getBase64Data()
                         );
                     }catch (error) {
                         reject(error);
@@ -48,7 +48,7 @@ namespace CS4D{
                 return new Promise((resolve, reject) => {
                     try{
                         resolve(
-                            this.dataUrl.getPlainData()
+                            this.dataUri.getPlainData()
                         );
                     }catch (error) {
                         reject(error);

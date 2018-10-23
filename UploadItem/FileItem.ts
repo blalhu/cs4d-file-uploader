@@ -13,7 +13,7 @@ namespace CS4D {
 
             getPlainText(): Promise<string>{
                 return new Promise((resolve, reject) => {
-                    this.getDataUrl()
+                    this.getDataUri()
                         .then((dataUrl) => {
                             let dataUrlObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
                             resolve( dataUrlObj.getPlainData() );
@@ -27,7 +27,7 @@ namespace CS4D {
 
             getBase64(): Promise<string>{
                 return new Promise((resolve, reject) => {
-                    this.getDataUrl()
+                    this.getDataUri()
                         .then((dataUrl) => {
                             let dataUrlObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
                             resolve( dataUrlObj.getBase64Data() );
@@ -39,7 +39,7 @@ namespace CS4D {
                 });
             }
 
-            getDataUrl(): Promise<string>{
+            getDataUri(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     let fileReader = new FileReader();
                     fileReader.onload = () => {

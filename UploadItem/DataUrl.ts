@@ -25,7 +25,7 @@ namespace CS4D{
                 });
             }
 
-            getDataUrl(): Promise<string>{
+            getDataUri(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     resolve(this.dataUrl.getDataUri());
                 });

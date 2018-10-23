@@ -23,7 +23,7 @@ namespace CS4D {
                 } );
             }
 
-            getDataUrl(mimeType ?: string, base64 = false): Promise<string> {
+            getDataUri(mimeType ?: string, base64 = false): Promise<string> {
                 return new Promise( (resolve, reject) => {
                     if (mimeType == null) {
                         mimeType = '';

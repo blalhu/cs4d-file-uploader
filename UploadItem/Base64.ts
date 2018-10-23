@@ -26,7 +26,7 @@ namespace CS4D {
                 } );
             }
 
-            getDataUrl(mimeType ?: string, base64 = false): Promise<string> {
+            getDataUri(mimeType ?: string, base64 = false): Promise<string> {
                 return new Promise( (resolve, reject) => {
                     let dataUri = new DataUriType( new UploadType.DataUri.Input.Base64( this.base64.getBase64() ) );
                     resolve( dataUri.getDataUri(mimeType, base64) );

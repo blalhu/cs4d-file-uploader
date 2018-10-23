@@ -18,7 +18,7 @@ namespace CS4D {
 
             abstract getPlainText(): Promise<string>;
             abstract getBase64(): Promise<string>;
-            abstract getDataUrl(mimeType?:string, base64?: boolean): Promise<string>;
+            abstract getDataUri(mimeType?:string, base64?: boolean): Promise<string>;
             abstract getFile(filename?: string, mimeType?: string): Promise<File>;
 
             public uploadAsPlainText(){
@@ -47,15 +47,15 @@ namespace CS4D {
                 });
             }
 
-            public uploadAsDataUrl(){
+            public uploadAsDataUri(){
                 this.xhr.open(
                     'POST',
                     'http://127.0.0.1:8085/upload-reciever.php',
                     true
                 );
-                this.getDataUrl().then((dataUrl) => {
+                this.getDataUri().then((dataUri) => {
                     let formData = new FormData();
-                    formData.append('file-field', dataUrl);
+                    formData.append('file-field', dataUri);
                     this.xhr.send(formData);
                 });
             }

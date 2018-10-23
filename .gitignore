@@ -11,8 +11,4 @@
 !/UploadItem/DataUrl.ts
 !/UploadItem/PlainText.ts
 !/UploadType
-/UploadType/*
-!/UploadType/Base64.ts
-!/UploadType/DataUrl.ts
-/Options/*
-!/Options/PerformanceType.ts
+!/Options

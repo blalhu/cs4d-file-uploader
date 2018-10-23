@@ -6,7 +6,7 @@
   "include": [
     "Options/*.ts",
     "UploadItem/*.ts",
-    "UploadType/*.ts",
+    "UploadType/**/*.ts",
     "DataUrl.ts",
     "Uploader.ts"
   ]

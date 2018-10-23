@@ -11,9 +11,11 @@ namespace CS4D {
             base64: Base64Type;
             plainText: string;
             xhr: XMLHttpRequest;
+            options :Options.Options;
 
-            constructor(){
+            constructor( options :Options.Options ){
                 this.xhr = new XMLHttpRequest();
+                this.options = options;
             }
 
             abstract getPlainText(): Promise<string>;
@@ -24,7 +26,7 @@ namespace CS4D {
             public uploadAsPlainText(){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.0.1:8085/upload-reciever.php',
+                    this.options.uploadUrl,
                     true
                 );
                 this.getPlainText().then((content) => {
@@ -37,7 +39,7 @@ namespace CS4D {
             public uploadAsBase64(){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.0.1:8085/upload-reciever.php',
+                    this.options.uploadUrl,
                     true
                 );
                 this.getBase64().then((base64) => {
@@ -50,7 +52,7 @@ namespace CS4D {
             public uploadAsDataUri(){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.0.1:8085/upload-reciever.php',
+                    this.options.uploadUrl,
                     true
                 );
                 this.getDataUri().then((dataUri) => {
@@ -63,7 +65,7 @@ namespace CS4D {
             public uploadAsFile(filename: string = null){
                 this.xhr.open(
                     'POST',
-                    'http://127.0.0.1:8085/upload-reciever.php',
+                    this.options.uploadUrl,
                     true
                 );
                 this.getFile(filename).then((file) => {

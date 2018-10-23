@@ -5,8 +5,8 @@ namespace CS4D {
 
         export class FileItem extends AbstractItem {
 
-            constructor(file: File) {
-                super();
+            constructor(file: File, options :Options.Options) {
+                super(options);
                 this.file = file;
                 return this;
             }

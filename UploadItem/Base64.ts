@@ -6,8 +6,8 @@ namespace CS4D {
 
         export class Base64 extends AbstractItem {
 
-            constructor(base64: string) {
-                super();
+            constructor(base64: string, options :Options.Options) {
+                super(options);
                 this.base64 = new Base64Type( new UploadType.Base64.Input.Base64(base64) );
             }
 

@@ -8,9 +8,11 @@ namespace CS4D {
 
     export class Uploader {
         uploadList : Array<AbstractItem>;
+        options :Options.Options;
 
-        constructor(){
+        constructor( options :Options.Options ){
             this.uploadList = [];
+            this.options = options;
         }
 
         public addAsFile(file : File) {
@@ -18,7 +20,7 @@ namespace CS4D {
                 console.log(file);
                 throw new Error('Invalid argument type!');
             }
-            let currentUploadItem = new FileItem(file);
+            let currentUploadItem = new FileItem(file, this.options);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }
@@ -28,7 +30,7 @@ namespace CS4D {
                 console.log(dataUri);
                 throw new Error('Invalid argument type!');
             }
-            let currentUploadItem = new DataUriItem(dataUri);
+            let currentUploadItem = new DataUriItem(dataUri, this.options);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }
@@ -39,7 +41,7 @@ namespace CS4D {
                 console.log(dataUri);
                 throw new Error('Invalid argument type!');
             }
-            let currentUploadItem = new Base64Item(dataUri);
+            let currentUploadItem = new Base64Item(dataUri, this.options);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }
@@ -49,13 +51,22 @@ namespace CS4D {
                 console.log(plainText);
                 throw new Error('Invalid argument type!');
             }
-            let currentUploadItem = new PlainTextItem(plainText);
+            let currentUploadItem = new PlainTextItem(plainText, this.options);
             this.uploadList.push( currentUploadItem );
             return currentUploadItem;
         }
 
         public getUploadList(): Array<AbstractItem> {
             return this.uploadList;
+        }
+
+        public setOptions( options :Options.Options ):Uploader {
+            this.options = options;
+            return this;
+        }
+
+        public getOptions() :Options.Options {
+            return this.options;
         }
     }
 }

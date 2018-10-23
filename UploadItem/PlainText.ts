@@ -2,8 +2,8 @@ namespace CS4D {
     export namespace UploadItem {
         export class PlainText extends AbstractItem{
 
-            constructor( text ) {
-                super();
+            constructor( text, options :Options.Options ) {
+                super( options );
                 this.plainText = text;
                 return this;
             }

@@ -5,8 +5,8 @@ namespace CS4D{
 
         export class DataUri extends AbstractItem{
 
-            constructor(dataUri: string) {
-                super();
+            constructor(dataUri: string, options :Options.Options) {
+                super(options);
                 this.dataUri = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUri ) );
             }
 

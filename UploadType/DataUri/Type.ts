@@ -8,14 +8,22 @@ namespace CS4D {
 
             export class Type {
 
+                private static readonly daraUriRegexp = new RegExp('^data:([^,]*),(.*)$');
+
                 constructor(input: Input.AbstractInput, performanceStrategy: UploaderPerformanceType) {
                     this.performanceStrategy = performanceStrategy;
                     this.content = input.getContent();
                     this.uriString = input.getUriString();
-                    if (this.performanceStrategy != UploaderPerformanceType.PRELOAD) {
-                        return;
+                    if (
+                        input instanceof Input.DataUri
+                        && !this.uriString.match(Type.daraUriRegexp)
+                    ) {
+                        throw new Error('[CS4D Uploader] Input type is not DataUri!');
                     }
                     if (typeof this.uriString == 'undefined') {
+                        return;
+                    }
+                    if (this.performanceStrategy != UploaderPerformanceType.PRELOAD) {
                         return;
                     }
                     this.uriParts = this.getDataUriParts(this.uriString);
@@ -26,6 +34,7 @@ namespace CS4D {
                 private uriString: string;
                 private uriParts: DataUriValues;
                 private performanceStrategy: UploaderPerformanceType;
+
 
                 public getPlainData() {
                     return this.content.getPlainText();
@@ -86,7 +95,7 @@ namespace CS4D {
                     if (dataUri == null) {
                         dataUri = this.uriString
                     }
-                    var dataUriRegExp = new RegExp('^data\:([^\,]*)\,(.*)$'); //TODO: workaround for look behind
+                    var dataUriRegExp = Type.daraUriRegexp;
                     var processedParts = dataUriRegExp.exec(dataUri);
                     var returnParts = new DataUriValues();
                     returnParts.completeData = dataUri;

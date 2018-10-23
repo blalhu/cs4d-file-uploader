@@ -15,6 +15,11 @@ namespace CS4D {
                 constructor(value: Input.InputInterface, performanceStrategy: UploaderPerformanceType) {
                     this.performanceStrategy = performanceStrategy;
                     if (value instanceof Input.Base64) {
+                        try {
+                            atob( value.getInputValue() );
+                        } catch (e) {
+                            throw new Error('[CS4D Uploader] Input type is not base64!');
+                        }
                         this.base64 = value.getInputValue();
                         if (performanceStrategy == UploaderPerformanceType.PRELOAD) {
                             this.plainText = atob(this.base64);

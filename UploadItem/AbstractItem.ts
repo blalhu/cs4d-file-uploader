@@ -1,9 +1,14 @@
 namespace CS4D {
     export namespace UploadItem {
+
+        import Base64Type = UploadType.Base64.Type;
+        import DataUriType = UploadType.DataUri.Type;
+
         export abstract class AbstractItem {
+
             file: File;
-            dataUrl: string;
-            base64: string;
+            dataUrl: DataUriType;
+            base64: Base64Type;
             plainText: string;
             xhr: XMLHttpRequest;
 

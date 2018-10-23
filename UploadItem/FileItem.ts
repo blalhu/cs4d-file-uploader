@@ -1,5 +1,8 @@
 namespace CS4D {
     export namespace UploadItem {
+
+        import DataUriType = UploadType.DataUri.Type;
+
         export class FileItem extends AbstractItem {
 
             constructor(file: File) {
@@ -12,14 +15,8 @@ namespace CS4D {
                 return new Promise((resolve, reject) => {
                     this.getDataUrl()
                         .then((dataUrl) => {
-                            let dataUrlObj = new CS4D.DataUrl( dataUrl );
-                            if(!dataUrlObj.contentIsBase64()){
-                                resolve( dataUrlObj.getContent() );
-                                return;
-                            }
-                            resolve(
-                                atob( dataUrlObj.getContent() )
-                            );
+                            let dataUrlObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
+                            resolve( dataUrlObj.getPlainData() );
                         })
                         .catch((error) => {
                             reject(error);
@@ -32,14 +29,8 @@ namespace CS4D {
                 return new Promise((resolve, reject) => {
                     this.getDataUrl()
                         .then((dataUrl) => {
-                            let dataUrlObj = new CS4D.DataUrl( dataUrl );
-                            if(dataUrlObj.contentIsBase64()){
-                                resolve( dataUrlObj.getContent() );
-                                return;
-                            }
-                            resolve(
-                                btoa( dataUrlObj.getContent() )
-                            );
+                            let dataUrlObj = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
+                            resolve( dataUrlObj.getBase64Data() );
                         })
                         .catch((error) => {
                             reject(error);

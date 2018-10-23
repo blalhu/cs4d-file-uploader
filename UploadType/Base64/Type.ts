@@ -12,7 +12,7 @@ namespace CS4D {
 
                 private performanceStrategy: UploaderPerformanceType;
 
-                constructor(value: Input.InputInterface, performanceStrategy: UploaderPerformanceType) {
+                constructor(value: Input.InputInterface, performanceStrategy: UploaderPerformanceType = UploaderPerformanceType.PRELOAD) {
                     this.performanceStrategy = performanceStrategy;
                     if (value instanceof Input.Base64) {
                         try {

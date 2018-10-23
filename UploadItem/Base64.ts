@@ -1,10 +1,14 @@
 namespace CS4D {
     export namespace UploadItem {
+
+        import Base64Type = UploadType.Base64.Type;
+        import DataUriType = UploadType.DataUri.Type;
+
         export class Base64 extends AbstractItem {
 
             constructor(base64: string) {
                 super();
-                this.base64 = base64;
+                this.base64 = new Base64Type( new UploadType.Base64.Input.Base64(base64) );
             }
 
             getFile(filename: string = null): Promise<File> {
@@ -13,7 +17,7 @@ namespace CS4D {
                         if(filename === null){
                             filename = 'c4sd-' + ((new Date()).getTime()).toString();
                         }
-                        let file = new File([atob(this.base64)], filename);
+                        let file = new File([this.base64.getPlainText()], filename);
                         resolve( file );
                     }catch (error) {
                         reject(error);
@@ -24,30 +28,20 @@ namespace CS4D {
 
             getDataUrl(mimeType ?: string, base64 = false): Promise<string> {
                 return new Promise( (resolve, reject) => {
-                    if (mimeType == null) {
-                        mimeType = '';
-                    }
-                    let base64String = '';
-                    let contentString;
-                    if (base64) {
-                        base64String = ';base64';
-                        contentString = this.base64;
-                    } else {
-                        contentString = atob(this.base64);
-                    }
-                    resolve( 'data:' + mimeType + base64String + ',' + contentString );
+                    let dataUri = new DataUriType( new UploadType.DataUri.Input.Base64( this.base64.getBase64() ) );
+                    resolve( dataUri.getDataUri(mimeType, base64) );
                 } );
             }
 
             getBase64(): Promise<string> {
                 return new Promise( (resolve, reject) => {
-                    resolve( this.base64 );
+                    resolve( this.base64.getBase64() );
                 } );
             }
 
             getPlainText(): Promise<string> {
                 return new Promise( (resolve, reject) => {
-                    resolve( atob( this.base64 ) );
+                    resolve( this.base64.getPlainText() );
                 } );
             }
 

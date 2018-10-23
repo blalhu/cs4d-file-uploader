@@ -1,20 +1,22 @@
 namespace CS4D{
     export namespace UploadItem{
+
+        import DataUriType = UploadType.DataUri.Type;
+
         export class DataUrl extends AbstractItem{
 
             constructor(dataUrl: string) {
                 super();
-                this.dataUrl = dataUrl;
+                this.dataUrl = new DataUriType( new UploadType.DataUri.Input.DataUri( dataUrl ) );
             }
 
             getFile(filename: string = null): Promise<File>{
                 return new Promise((resolve, reject) => {
                     try{
-                        let dataUrlObject = new CS4D.DataUrl( this.dataUrl );
                         if(filename === null){
                             filename = 'c4sd-' + ((new Date()).getTime()).toString();
                         }
-                        let file = new File([dataUrlObject.getContent()], filename, {type: dataUrlObject.getMimeType()});
+                        let file = new File([this.dataUrl.getPlainData()], filename, {type: this.dataUrl.getMediaType().split(';')[0]});
                         resolve( file );
                     }catch (error) {
                         reject(error);
@@ -25,20 +27,15 @@ namespace CS4D{
 
             getDataUrl(): Promise<string>{
                 return new Promise((resolve, reject) => {
-                    resolve(this.dataUrl);
+                    resolve(this.dataUrl.getDataUri());
                 });
             }
 
             getBase64(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     try{
-                        let dataUrlObject = new CS4D.DataUrl( this.dataUrl );
-                        if(dataUrlObject.contentIsBase64()){
-                            resolve(dataUrlObject.getContent());
-                            return;
-                        }
                         resolve(
-                            btoa( dataUrlObject.getContent() )
+                            this.dataUrl.getBase64Data()
                         );
                     }catch (error) {
                         reject(error);
@@ -50,13 +47,8 @@ namespace CS4D{
             getPlainText(): Promise<string>{
                 return new Promise((resolve, reject) => {
                     try{
-                        let dataUrlObject = new CS4D.DataUrl( this.dataUrl );
-                        if(!dataUrlObject.contentIsBase64()){
-                            resolve(dataUrlObject.getContent());
-                            return;
-                        }
                         resolve(
-                            atob( dataUrlObject.getContent() )
+                            this.dataUrl.getPlainData()
                         );
                     }catch (error) {
                         reject(error);

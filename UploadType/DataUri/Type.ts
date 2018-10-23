@@ -10,7 +10,7 @@ namespace CS4D {
 
                 private static readonly daraUriRegexp = new RegExp('^data:([^,]*),(.*)$');
 
-                constructor(input: Input.AbstractInput, performanceStrategy: UploaderPerformanceType) {
+                constructor(input: Input.AbstractInput, performanceStrategy: UploaderPerformanceType = UploaderPerformanceType.PRELOAD) {
                     this.performanceStrategy = performanceStrategy;
                     this.content = input.getContent();
                     this.uriString = input.getUriString();

@@ -12,10 +12,17 @@ namespace CS4D {
             plainText: string;
             xhr: XMLHttpRequest;
             options :Options.Options;
+            uploadItemId :string;
 
-            constructor( options :Options.Options ){
-                this.xhr = new XMLHttpRequest();
+            constructor( options :Options.Options, xhr? :XMLHttpRequest, name? :string ){
+                this.xhr = xhr;
+                if (this.xhr == null) {
+                    this.xhr = this.getDefaultXhr();
+                }
                 this.options = options;
+                if (name == null) {
+                    this.uploadItemId = Math.random().toString();
+                }
             }
 
             abstract getPlainText(): Promise<string>;
@@ -24,55 +31,46 @@ namespace CS4D {
             abstract getFile(filename?: string, mimeType?: string): Promise<File>;
 
             public uploadAsPlainText(){
-                this.xhr.open(
-                    'POST',
-                    this.options.uploadUrl,
-                    true
-                );
-                this.getPlainText().then((content) => {
-                    let formData = new FormData();
-                    formData.append('file-field', content);
-                    this.xhr.send(formData);
-                });
+                this.options.onContentReady( this.getPlainText(), this.xhr, this.options );
             }
 
             public uploadAsBase64(){
-                this.xhr.open(
-                    'POST',
-                    this.options.uploadUrl,
-                    true
-                );
-                this.getBase64().then((base64) => {
-                    let formData = new FormData();
-                    formData.append('file-field', base64);
-                    this.xhr.send(formData);
-                });
+                this.options.onContentReady( this.getBase64(), this.xhr, this.options );
             }
 
             public uploadAsDataUri(){
-                this.xhr.open(
-                    'POST',
-                    this.options.uploadUrl,
-                    true
-                );
-                this.getDataUri().then((dataUri) => {
-                    let formData = new FormData();
-                    formData.append('file-field', dataUri);
-                    this.xhr.send(formData);
-                });
+                this.options.onContentReady( this.getDataUri(), this.xhr, this.options );
             }
 
             public uploadAsFile(filename: string = null){
-                this.xhr.open(
-                    'POST',
-                    this.options.uploadUrl,
-                    true
-                );
-                this.getFile(filename).then((file) => {
-                    let formData = new FormData();
-                    formData.append('file-field', file);
-                    this.xhr.send(formData);
-                });
+                this.options.onContentReady( this.getFile(), this.xhr, this.options );
+            }
+
+            private getDefaultXhr(){
+                let xhr = new XMLHttpRequest();
+                let that = this;
+                xhr.onreadystatechange = function (event) {
+                    switch ( xhr.readyState ) {
+                        case 2:
+                            that.options.onHeadersRecieved(that);
+                            break;
+                        case 3:
+                            that.options.onLoading(that);
+                            break;
+                        case 4:
+                            that.options.onDone(that);
+                            if ( xhr.status >= 400 ) {
+                                that.options.onFail(that);
+                            } else {
+                                that.options.onSuccess(that);
+                            }
+                            break;
+                    }
+                };
+                xhr.onprogress = function (event: ProgressEvent) {
+                    that.options.onProgressChange(that, event.total, event.loaded);
+                };
+                return xhr;
             }
         }
     }

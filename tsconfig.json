@@ -4,6 +4,7 @@
     "target": "es2015"
   },
   "include": [
+    "MassUploadStrategy/*.ts",
     "Options/*.ts",
     "UploadType/**/*.ts",
     "UploadItem/*.ts",

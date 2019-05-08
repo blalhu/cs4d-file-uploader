@@ -13,9 +13,13 @@ namespace CS4D {
             xhr: XMLHttpRequest;
             options :Options.Options;
             uploadItemId :string;
+            uploadCount :number;
+            uploadInProgress :boolean;
 
             constructor( options :Options.Options, xhr? :XMLHttpRequest, name? :string ){
-                this.xhr = xhr;
+                this.xhr = xhr; //TODO: this should be a clone
+                this.uploadCount = 0;
+                this.uploadInProgress = false;
                 if (this.xhr == null) {
                     this.xhr = this.getDefaultXhr();
                 }
@@ -31,18 +35,22 @@ namespace CS4D {
             abstract getFile(filename?: string, mimeType?: string): Promise<File>;
 
             public uploadAsPlainText(){
+                this.uploadInProgress = true;
                 this.options.onContentReady( this.getPlainText(), this.xhr, this.options );
             }
 
             public uploadAsBase64(){
+                this.uploadInProgress = true;
                 this.options.onContentReady( this.getBase64(), this.xhr, this.options );
             }
 
             public uploadAsDataUri(){
+                this.uploadInProgress = true;
                 this.options.onContentReady( this.getDataUri(), this.xhr, this.options );
             }
 
             public uploadAsFile(filename: string = null){
+                this.uploadInProgress = true;
                 this.options.onContentReady( this.getFile(), this.xhr, this.options );
             }
 
@@ -53,12 +61,16 @@ namespace CS4D {
                     switch ( xhr.readyState ) {
                         case 2:
                             that.options.onHeadersRecieved(that);
+                            that.uploadInProgress = true;
                             break;
                         case 3:
                             that.options.onLoading(that);
+                            that.uploadInProgress = true;
                             break;
                         case 4:
                             that.options.onDone(that);
+                            that.uploadCount++;
+                            that.uploadInProgress = false;
                             if ( xhr.status >= 400 ) {
                                 that.options.onFail(that);
                             } else {

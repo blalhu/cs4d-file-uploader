@@ -13,6 +13,8 @@ namespace CS4D {
         constructor( options :Options.Options ){
             this.uploadList = [];
             this.options = options;
+            var massUploadStrategy = new this.options.massUploadStrategy();
+            massUploadStrategy.startChecking( this );
         }
 
         public addAsFile(file : File) {
@@ -67,6 +69,36 @@ namespace CS4D {
 
         public getOptions() :Options.Options {
             return this.options;
+        }
+
+        public uploadAllQueued() :Array<AbstractItem> {
+            //TODO: use xhr from options
+            let xhr = new XMLHttpRequest();
+            xhr.open(
+                this.options.requestMethod,
+                this.options.requestUrl
+            );
+            let formData = new FormData();
+            let fieldIndex = 0;
+            let processIndex = 0;
+            for (var i in this.uploadList) {
+                let uploadItem = this.uploadList[i];
+                if (  uploadItem.uploadInProgress ) {
+                    continue;
+                }
+                uploadItem.getFile().then(( content ) => {
+                    console.log(content);
+                    formData.append('file-field-'+fieldIndex++, content);
+                    if (this.uploadList.length-1 == processIndex) {
+                        console.log('foo')
+                        console.log(formData);
+                        xhr.send(formData);
+                    }
+                    ++processIndex;
+                });
+            }
+            //TODO: possibility to start individual requests per files
+            return this.uploadList; //TODO: return the uploaded items
         }
     }
 }

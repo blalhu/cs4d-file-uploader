@@ -9,12 +9,17 @@ namespace CS4D {
     export class Uploader {
         uploadList : Array<AbstractItem>;
         options :Options.Options;
+        uploadProgressTotal : number;
+        uploadProgressCurrent : number;
 
-        constructor( options :Options.Options ){
+        constructor( options :Options.Options ){//TODO: id should be set
             this.uploadList = [];
             this.options = options;
+            this.uploadProgressCurrent = null;
+            this.uploadProgressTotal   = null;
             var massUploadStrategy = new this.options.massUploadStrategy();
             massUploadStrategy.startChecking( this );
+            this.checkStatuses();
         }
 
         public addAsFile(file : File) {
@@ -143,5 +148,44 @@ namespace CS4D {
             }
             return uploadedItems;
         }
+
+        private checkStatuses() {
+            let that = this;
+            setTimeout(function () {
+                that.checkStatuses();
+            },20);
+            let uploadTotal   : number = 0;
+            let uploadCurrent : number = 0;
+            for (var i in this.uploadList) {
+                let uploadItem = this.uploadList[i];
+                if (uploadItem.lastUploadTotal != null && uploadItem.lastUploadStatus != null) {
+                    uploadTotal   += uploadItem.lastUploadTotal;
+                    uploadCurrent += uploadItem.lastUploadStatus;
+                }
+            }
+            if (
+                this.uploadProgressCurrent  != uploadCurrent
+                || this.uploadProgressTotal != uploadTotal
+            ) {
+                //upload started
+                if (this.uploadProgressCurrent < uploadCurrent) {
+                    let event = new Event('cs4d.file_uploader.upload_started');
+                    document.dispatchEvent(event);
+                }
+                //uploads finished
+                if (uploadTotal == 0 && this.uploadProgressTotal > 0) {
+                    let event = new Event('cs4d.file_uploader.upload_finished');
+                    document.dispatchEvent(event);
+                }
+            }
+            if (uploadTotal == 0) {
+                this.uploadProgressCurrent = null;
+                this.uploadProgressTotal   = null;
+                return;
+            }
+            this.uploadProgressCurrent = uploadCurrent;
+            this.uploadProgressTotal   = uploadTotal;
+        }
+
     }
 }

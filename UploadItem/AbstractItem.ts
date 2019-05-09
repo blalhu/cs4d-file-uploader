@@ -15,6 +15,10 @@ namespace CS4D {
             uploadItemId :string;
             uploadCount :number;
             uploadInProgress :boolean;
+            lastFinishedStatus :string;
+            lastUploadTotal  :number;
+            lastUploadStatus :number;
+
 
             constructor( options :Options.Options, xhr? :XMLHttpRequest, name? :string ){
                 this.xhr = xhr; //TODO: this should be a clone
@@ -27,6 +31,9 @@ namespace CS4D {
                 if (name == null) {
                     this.uploadItemId = Math.random().toString();
                 }
+                this.lastFinishedStatus = 'unknown';
+                this.lastUploadTotal  = null;
+                this.lastUploadStatus = null;
             }
 
             abstract getPlainText(): Promise<string>;
@@ -58,6 +65,9 @@ namespace CS4D {
                 let xhr = new XMLHttpRequest();
                 let that = this;
                 xhr.onreadystatechange = function (event) {
+                    that.lastFinishedStatus = 'unknown';
+                    that.lastUploadTotal  = null;
+                    that.lastUploadStatus = null;
                     switch ( xhr.readyState ) {
                         case 2:
                             that.options.onHeadersRecieved(that);
@@ -73,14 +83,18 @@ namespace CS4D {
                             that.uploadInProgress = false;
                             if ( xhr.status >= 400 ) {
                                 that.options.onFail(that);
+                                that.lastFinishedStatus = 'fail';
                             } else {
                                 that.options.onSuccess(that);
+                                that.lastFinishedStatus = 'success';
                             }
                             break;
                     }
                 };
                 xhr.onprogress = function (event: ProgressEvent) {
                     that.options.onProgressChange(that, event.total, event.loaded);
+                    that.lastUploadTotal  = event.total;
+                    that.lastUploadStatus = event.loaded;
                 };
                 return xhr;
             }

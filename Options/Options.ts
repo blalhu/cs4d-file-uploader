@@ -12,7 +12,7 @@ namespace CS4D {
 
             requestUrl     : string;
             requestMethod  : string = 'POST';
-            massUploadAs       = Options.UPLOAD_TYPE_FILE;
+            massUploadAs       = Options.UPLOAD_TYPE_UPLOAD_URL;
             massUploadStrategy = ImmedateStrategy;
             onContentReady = function ( content : Promise<string|File>, xhr : XMLHttpRequest, options : Options.Options ) {
                 xhr.open(

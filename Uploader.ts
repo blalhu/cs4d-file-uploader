@@ -71,7 +71,7 @@ namespace CS4D {
             return this.options;
         }
 
-        public uploadAllQueued() :Array<AbstractItem> {
+        public uploadAllQueuedTogether() :Array<AbstractItem> {
             //TODO: use xhr from options
             let xhr = new XMLHttpRequest();
             xhr.open(
@@ -81,24 +81,67 @@ namespace CS4D {
             let formData = new FormData();
             let fieldIndex = 0;
             let processIndex = 0;
+            let uploadedItems : Array<AbstractItem> = [];
             for (var i in this.uploadList) {
                 let uploadItem = this.uploadList[i];
-                if (  uploadItem.uploadInProgress ) {
+                if (  uploadItem.uploadInProgress ) {//TODO: add upload cnt limitation
                     continue;
                 }
-                uploadItem.getFile().then(( content ) => {
-                    console.log(content);
+                uploadedItems.push(uploadItem);
+                let uploadContent = null;
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_FILE ) {
+                    uploadContent = uploadItem.getFile();
+                }
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_UPLOAD_URL ) {
+                    uploadContent = uploadItem.getDataUri();
+                }
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_BASE64 ) {
+                    uploadContent = uploadItem.getBase64();
+                }
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_PLAIN_TEXT ) {
+                    uploadContent = uploadItem.getPlainText();
+                }
+                if ( uploadContent == null ) {
+                    throw new Error('Invalid upload type!');
+                }
+                uploadContent.then(( content ) => {
                     formData.append('file-field-'+fieldIndex++, content);
                     if (this.uploadList.length-1 == processIndex) {
-                        console.log('foo')
-                        console.log(formData);
                         xhr.send(formData);
+                        return uploadedItems;
                     }
                     ++processIndex;
                 });
             }
-            //TODO: possibility to start individual requests per files
-            return this.uploadList; //TODO: return the uploaded items
+            return uploadedItems;
+        }
+
+        public uploadAllQueuedSeparately() :Array<AbstractItem> {
+            let uploadedItems : Array<AbstractItem> = [];
+            for (var i in this.uploadList) {
+                let uploadItem = this.uploadList[i];
+                if (  uploadItem.uploadInProgress ) {//TODO: add upload cnt limitation
+                    continue;
+                }
+                uploadedItems.push(uploadItem);
+                let uploadContent = null;
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_FILE ) {
+                    uploadContent = uploadItem.uploadAsFile();
+                }
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_UPLOAD_URL ) {
+                    uploadContent = uploadItem.uploadAsDataUri();
+                }
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_BASE64 ) {
+                    uploadContent = uploadItem.uploadAsBase64();
+                }
+                if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_PLAIN_TEXT ) {
+                    uploadContent = uploadItem.uploadAsPlainText();
+                }
+                if ( uploadContent == null ) {
+                    throw new Error('Invalid upload type!');
+                }
+            }
+            return uploadedItems;
         }
     }
 }

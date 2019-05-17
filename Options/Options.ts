@@ -1,7 +1,7 @@
 namespace CS4D {
     export namespace Options {
         import AbstractItem = CS4D.UploadItem.AbstractItem;
-        import ImmedateStrategy = CS4D.MassUploadStrategy.Immediate;
+        import ImmediateStrategy = CS4D.MassUploadStrategy.Immediate;
 
         export class Options {
 
@@ -13,7 +13,7 @@ namespace CS4D {
             requestUrl     : string;
             requestMethod  : string = 'POST';
             massUploadAs       = Options.UPLOAD_TYPE_UPLOAD_URL;
-            massUploadStrategy = ImmedateStrategy;
+            massUploadStrategy = ImmediateStrategy;
             onContentReady = function ( content : Promise<string|File>, xhr : XMLHttpRequest, options : Options.Options ) {
                 xhr.open(
                     options.requestMethod,

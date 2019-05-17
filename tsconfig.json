@@ -3,11 +3,26 @@
     "outFile": "cs4d-uploader.js",
     "target": "es2015"
   },
-  "include": [
-    "MassUploadStrategy/*.ts",
-    "Options/*.ts",
-    "UploadType/**/*.ts",
-    "UploadItem/*.ts",
+  "files": [ // Use this instead of "include" so I can control the order during the output generation.
+    "MassUploadStrategy/Immediate.ts",
+    "MassUploadStrategy/Manual.ts",
+    "MassUploadStrategy/Packed.ts",
+    "Options/PerformanceType.ts",
+    "Options/Options.ts",
+    "UploadType/Base64/Input/Base64.ts",
+    "UploadType/Base64/Input/InputInterface.ts",
+    "UploadType/Base64/Input/PlainText.ts",
+    "UploadType/Base64/Type.ts",
+    "UploadType/DataUri/Input/AbstractInput.ts",
+    "UploadType/DataUri/Input/Base64.ts",
+    "UploadType/DataUri/Input/DataUri.ts",
+    "UploadType/DataUri/Input/PlainText.ts",
+    "UploadType/DataUri/Type.ts",
+    "UploadItem/AbstractItem.ts",
+    "UploadItem/Base64.ts",
+    "UploadItem/DataUri.ts",
+    "UploadItem/FileItem.ts",
+    "UploadItem/PlainText.ts",
     "Uploader.ts"
   ]
 }

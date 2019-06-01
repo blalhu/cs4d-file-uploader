@@ -125,25 +125,21 @@ namespace CS4D {
             let uploadedItems : Array<AbstractItem> = [];
             for (var i in this.uploadList) {
                 let uploadItem = this.uploadList[i];
-                if (  uploadItem.uploadInProgress ) {//TODO: add upload cnt limitation
+                if (  uploadItem.uploadInProgress ) {
                     continue;
                 }
                 uploadedItems.push(uploadItem);
-                let uploadContent = null;
                 if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_FILE ) {
-                    uploadContent = uploadItem.uploadAsFile();
+                    uploadItem.uploadAsFile();
                 }
                 if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_UPLOAD_URL ) {
-                    uploadContent = uploadItem.uploadAsDataUri();
+                    uploadItem.uploadAsDataUri();
                 }
                 if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_BASE64 ) {
-                    uploadContent = uploadItem.uploadAsBase64();
+                    uploadItem.uploadAsBase64();
                 }
                 if ( this.options.massUploadAs == Options.Options.UPLOAD_TYPE_PLAIN_TEXT ) {
-                    uploadContent = uploadItem.uploadAsPlainText();
-                }
-                if ( uploadContent == null ) {
-                    throw new Error('Invalid upload type!');
+                    uploadItem.uploadAsPlainText();
                 }
             }
             return uploadedItems;
@@ -186,6 +182,8 @@ namespace CS4D {
             this.uploadProgressCurrent = uploadCurrent;
             this.uploadProgressTotal   = uploadTotal;
         }
+
+        //TODO: create a method to empty the queue
 
     }
 }

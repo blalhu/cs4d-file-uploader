@@ -18,6 +18,8 @@ namespace CS4D {
             lastFinishedStatus :string;
             lastUploadTotal  :number;
             lastUploadStatus :number;
+            lastDownloadTotal  :number;
+            lastDownloadStatus :number;
 
 
             constructor( options :Options.Options, xhr? :XMLHttpRequest, name? :string ){
@@ -91,10 +93,15 @@ namespace CS4D {
                             break;
                     }
                 };
-                xhr.onprogress = function (event: ProgressEvent) {
-                    that.options.onProgressChange(that, event.total, event.loaded);
+                xhr.upload.onprogress = function (event: ProgressEvent) {
+                    that.options.onUpProgressChange(that, event.total, event.loaded);
                     that.lastUploadTotal  = event.total;
                     that.lastUploadStatus = event.loaded;
+                };
+                xhr.onprogress = function (event: ProgressEvent) {
+                    that.options.onDownProgressChange(that, event.total, event.loaded);
+                    that.lastDownloadTotal  = event.total;
+                    that.lastDownloadStatus = event.loaded;
                 };
                 return xhr;
             }

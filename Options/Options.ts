@@ -60,11 +60,18 @@ namespace CS4D {
                     );
                 document.dispatchEvent(event);
             };
-            onProgressChange= function (uploadItem: AbstractItem, fullSize, loadedSize) {
+            onUpProgressChange= function (uploadItem: AbstractItem, fullSize, loadedSize) {
                 let event = new CustomEvent(
-                    'cs4d.file_uploader.upload_item.progress_change',
+                    'cs4d.file_uploader.upload_item.up_progress_change',
                     { detail:{upload_item:uploadItem, full_size:fullSize, loaded_size:loadedSize} }
-                    );
+                );
+                document.dispatchEvent(event);
+            };
+            onDownProgressChange= function (uploadItem: AbstractItem, fullSize, loadedSize) {
+                let event = new CustomEvent(
+                    'cs4d.file_uploader.upload_item.down_progress_change',
+                    { detail:{upload_item:uploadItem, full_size:fullSize, loaded_size:loadedSize} }
+                );
                 document.dispatchEvent(event);
             };
         }
